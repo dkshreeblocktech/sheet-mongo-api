@@ -4,7 +4,10 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://admin:admin123@cluster0.uhgapf3.mongodb.net/students");
+mongoose.connect("mongodb+srv://admin:admin123@cluster0.uhgapf3.mongodb.net/students",{
+  useNewUrlParser:true,
+  useUnifiedTopology:true
+});
 
 const Student = mongoose.model("details",{
   name:String,
