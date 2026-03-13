@@ -1,38 +1,61 @@
-const express = require("express");
-const mongoose = require("mongoose");
+const express = require("express")
+const mongoose = require("mongoose")
+const cors = require("cors")
 
-const app = express();
-app.use(express.json());
+const app = express()
 
-mongoose.connect(
-"mongodb+srv://admin:admin123@cluster0.uhgapf3.mongodb.net/students?retryWrites=true&w=majority"
-).then(()=>console.log("MongoDB Connected"));
+app.use(cors())
+app.use(express.json())
 
-const Student = mongoose.model("details",{
- name:String,
- fathername:String,
- mothername:String,
- location:String
-});
+// MongoDB connection
+mongoose.connect("mongodb+srv://admin:admin123@cluster0.uhgapf3.mongodb.net/students")
 
-app.post("/add", async (req,res)=>{
+.then(()=>{
+    console.log("MongoDB Connected")
+})
+.catch((err)=>{
+    console.log(err)
+})
 
- try{
+// Schema
+const StudentSchema = new mongoose.Schema({
 
-  const data = new Student(req.body);
-  await data.save();
+    name:String,
+    fathername:String,
+    mothername:String,
+    location:String
 
-  res.send("Saved");
+})
 
- }catch(err){
+const Student = mongoose.model("details",StudentSchema)
 
-  console.log(err);
-  res.send("Error");
 
- }
+// Test route
+app.get("/",(req,res)=>{
+    res.send("API Working")
+})
 
-});
 
-app.listen(process.env.PORT || 3000, ()=>{
- console.log("Server running");
-});
+// Add data
+app.post("/add",async(req,res)=>{
+
+    const data = new Student({
+
+        name:req.body.name,
+        fathername:req.body.fathername,
+        mothername:req.body.mothername,
+        location:req.body.location
+
+    })
+
+    await data.save()
+
+    res.send("Saved Successfully")
+
+})
+
+
+// Server
+app.listen(10000,()=>{
+    console.log("Server running")
+})
