@@ -9,30 +9,30 @@ mongoose.connect(
 ).then(()=>console.log("MongoDB Connected"));
 
 const Student = mongoose.model("details",{
-name:String,
-fathername:String,
-mothername:String,
-location:String
+ name:String,
+ fathername:String,
+ mothername:String,
+ location:String
 });
 
 app.post("/add", async (req,res)=>{
 
-try{
+ try{
 
-const data = new Student(req.body);
-await data.save();
+  const data = new Student(req.body);
+  await data.save();
 
-res.send("Saved");
+  res.send("Saved");
 
-}catch(err){
+ }catch(err){
 
-console.log(err);
-res.send("Error");
+  console.log(err);
+  res.send("Error");
 
-}
+ }
 
 });
 
 app.listen(process.env.PORT || 3000, ()=>{
-console.log("Server running");
+ console.log("Server running");
 });
