@@ -4,6 +4,7 @@ const cors = require("cors")
 
 const app = express()
 
+// middleware
 app.use(cors())
 app.use(express.json())
 
@@ -27,6 +28,7 @@ const StudentSchema = new mongoose.Schema({
 
 })
 
+// Model
 const Student = mongoose.model("details",StudentSchema)
 
 
@@ -36,26 +38,45 @@ app.get("/",(req,res)=>{
 })
 
 
-// Add data
+// Add data route
 app.post("/add",async(req,res)=>{
 
-    const data = new Student({
+    try{
 
-        name:req.body.name,
-        fathername:req.body.fathername,
-        mothername:req.body.mothername,
-        location:req.body.location
+        const data = new Student({
 
-    })
+            name:req.body.name,
+            fathername:req.body.fathername,
+            mothername:req.body.mothername,
+            location:req.body.location
 
-    await data.save()
+        })
 
-    res.send("Saved Successfully")
+        await data.save()
+
+        res.send("Saved Successfully")
+
+    }
+    catch(err){
+
+        res.send(err)
+
+    }
 
 })
 
 
-// Server
+// View all records
+app.get("/all",async(req,res)=>{
+
+    const data = await Student.find()
+
+    res.json(data)
+
+})
+
+
+// Server start
 app.listen(10000,()=>{
-    console.log("Server running")
+    console.log("Server running on port 10000")
 })
